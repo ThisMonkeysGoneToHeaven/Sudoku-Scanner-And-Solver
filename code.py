@@ -11,7 +11,7 @@ def whiteness(pic):
 	return (white_pixels/total_pixels)
 
 # loading the image
-image = Image.open('image1.jpg').convert('RGB')
+image = Image.open('image.jpg').convert('RGB')
 
 # resizing image upto a Good size
 size = (400,400)
