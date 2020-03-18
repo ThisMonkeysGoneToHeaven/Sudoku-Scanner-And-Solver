@@ -42,9 +42,9 @@ img_erosion = cv.erode(cv_image, kernel, iterations=1)
 # converting cv_image to PIL image back after thresholding
 
 if mode == 'thresh':
-	img = cv.cvtColor(thresh, cv.COLOR_BGR2RGB)
+	img = cv.cvtColor(thresh, cv.COLOR_GRAY2RGB)
 else:
-	img = cv.cvtColor(img_erosion, cv.COLOR_BGR2RGB)
+	img = cv.cvtColor(img_erosion, cv.COLOR_GRAY2RGB)
 image = Image.fromarray(numpy.array(img))
 
 
@@ -99,3 +99,4 @@ for i in range(9):
 			count += 1
 print(count)
 image.show()
+
