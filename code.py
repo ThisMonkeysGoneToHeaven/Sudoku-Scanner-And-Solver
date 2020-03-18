@@ -142,7 +142,7 @@ for i in range(9):
 # print(count)
 
 ## loading the tensorflow model stored locally
-model = models.load_model('weights.h5')
+model = models.load_model('model.h5')
 
 ## storing all the results in board array
 for i in range(9):
