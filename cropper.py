@@ -1,3 +1,7 @@
+""" 
+CURRENTLY NOT USING THIS CROPPER.PY FILE BUT CAN BE USED IN FUTURE.
+"""
+
 import sys
 from PyQt5 import QtGui, QtCore
 from PyQt5.QtWidgets import QPushButton, QLabel
