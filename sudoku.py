@@ -4,25 +4,29 @@ import time
 
 class Board:
     matrix = [[0 for _ in range(9)] for _ in range(9)]
+    stop = False
 
     def __init__(self):
         pg.init()
         self.original_matrix = [[0 for _ in range(9)] for _ in range(9)]
 
-        self.key_i = None
-        self.key_j = None
+        self.key_i = 0
+        self.key_j = 0
         self.white = (255, 255, 255)
         self.black = (0, 0, 0)
         self.red = (255, 0, 0)
+        self.gray = (67, 69, 71)
         self.green = (0, 255, 0)
-        self.FPS = 30
+        self.FPS = 13
         self.clock = pg.time.Clock()
         self.enough_no = None
+        self.start = time.time()
         # Window Variables
         self.display_width = 496
         self.display_height = 496
+        self.extra_space = 75
         self.display = pg.display.set_mode(
-            (self.display_width, self.display_height))
+            (self.display_width, self.display_height+self.extra_space))
         # ----------------------------------
         pg.display.set_caption('Sudoku')
         while True:
@@ -37,6 +41,21 @@ class Board:
             self.select_block()
             self.type_stuff()
             self.highlight_box()
+            self.bottom_space()
+            self.highlight_key()
+            if self.stop == True:
+                self.check_no()
+                if self.enough_no == False:
+                    text_1 = "Infinite Solutions Possible"
+                    text_2 = "Please Add More Valid Numbers"
+                    self.print_stuff(48, text_1,
+                                     self.red, 40, self.display_height // 2 - 40)
+                    self.print_stuff(48, text_2,
+                                     self.red, 3, self.display_height // 2 + 10)
+                    end = time.time()
+                    diff_time = self.start - end
+                    if abs(diff_time // 2) == 2:
+                        self.stop = False
 
             self.clock.tick(self.FPS)
             pg.display.update()
@@ -85,6 +104,48 @@ class Board:
                 yy = gap_vertical*j + 0.3*gap_vertical
                 if n != 0:
                     self.print_stuff(50, str(n), self.black, xx, yy)
+
+    def draw_button(self, x, y, color, width, height):
+        pg.draw.rect(self.display, color, (x, y, width, height))
+
+    def bottom_space(self):
+        btn_x = 330
+        btn_y = self.display_height+15
+        btn_width = self.display_width-335
+        btn_height = 50
+        self.draw_button(btn_x, btn_y,
+                         self.green, btn_width, btn_height)
+        self.print_stuff(40, "Solution", self.gray,
+                         self.display_width-145, self.display_height+28)
+
+        # Checking if the button is hovering over the button and if it is it will reveal the solution
+        click = pg.mouse.get_pressed()
+        mouse = pg.mouse.get_pos()
+        mouse_x = self.mouse[0]
+        mouse_y = self.mouse[1]
+        # Checking If The Mouse Is Hovering Over The Button And If Clicks Then Redirect it to the Game
+        if btn_x + btn_width > mouse_x > btn_x:
+            if btn_y + btn_width > mouse_y > btn_y:
+                if click[0] == 1:
+                    self.stop = True
+                    self.start = time.time()
+                    self.return_sol()
+
+        # Drawing a line for the bottom
+        self.draw_line(self.black, 0, self.display_height,
+                       self.display_width, 5)
+
+        self.print_stuff(21, "Press Enter To Solve The Board",
+                         self.black, 0, self.display_height+15)
+
+        self.print_stuff(21, "The Board Should have At Least 16 Numbers",
+                         self.black, 0, self.display_height+35)
+
+        self.print_stuff(21, "Press Space To Empty The Board",
+                         self.black, 0, self.display_height+55)
+
+        self.draw_line(self.black, 320, self.display_height,
+                       5, self.extra_space)
 
     def select_block(self):
         self.click = pg.mouse.get_pressed()
@@ -146,7 +207,9 @@ class Board:
                 self.matrix[self.key_j][self.key_i] = 9
             if self.keys[pg.K_SPACE]:
                 self.matrix = self.original_matrix
-            if self.keys[pg.K_RETURN]:
+            if self.keys[pg.K_RETURN] or self.keys[pg.K_KP_ENTER]:
+                self.stop = True
+                self.start = time.time()
                 self.return_sol()
 
     def highlight_box(self):
@@ -154,7 +217,7 @@ class Board:
         cell_height = self.display_height//9
 
         #color, x, y, width, height
-        if self.key_i != None and self.key_j != None:
+        if self.key_i != None and self.key_j != None and self.key_i <= 8:
             # if self.enough_no != False:
             # Top Line
             self.draw_line(self.green, self.key_j*cell_width,
@@ -168,6 +231,16 @@ class Board:
             # Bottom Line
             self.draw_line(self.green, (self.key_j*cell_width) + cell_width,
                            (self.key_i*cell_height)+cell_height, -cell_height, -3)
+
+    def highlight_key(self):
+        if self.keys[pg.K_UP] and self.key_i > 0:
+            self.key_i -= 1
+        elif self.keys[pg.K_DOWN]and self.key_i < 8:
+            self.key_i += 1
+        elif self.keys[pg.K_LEFT]and self.key_j > 0:
+            self.key_j -= 1
+        elif self.keys[pg.K_RIGHT]and self.key_j < 8:
+            self.key_j += 1
 
     # --------------------------------------------Solver----------------------------------------------------------------------------------
 
@@ -228,13 +301,7 @@ class Board:
 
     def return_sol(self):
         global time
-        self.check_no()
-        if self.enough_no == False:
-            self.print_stuff(48, "Infinite Solutions Possible",
-                             self.red, 40, self.display_height // 2 - 40)
-            self.print_stuff(48, "Please Add More Valid Numbers",
-                             self.red, 3, self.display_height // 2 + 10)
-        else:
+        if self.stop == False:
             print("Solving the board")
             self.solve(self.matrix)
 
