@@ -12,6 +12,7 @@ class App(QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Sudoku")
+        self.setWindowIcon(QIcon('favicon.png'))
         self.displayWidth = 300
         self.displayHeight = 400
         self.setGeometry(200, 200, self.displayWidth, self.displayHeight)
