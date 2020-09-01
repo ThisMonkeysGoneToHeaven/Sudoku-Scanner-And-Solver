@@ -7,6 +7,8 @@ This is a Sudoku Puzzle Solver application which is built in Qt Framework, PyGam
 - [Demo](https://github.com/DiAnant/Sudoku_Scanner_And_Solver/#Demo)
 - [Installation](https://github.com/DiAnant/Sudoku_Scanner_And_Solver/#Installation)
 - [Usage](https://github.com/DiAnant/Sudoku_Scanner_And_Solver/#Usage)
+- [Working](https://github.com/DiAnant/Sudoku_Scanner_And_Solver/#Working)
+- [Scope For Improvement](https://github.com/DiAnant/Sudoku_Scanner_And_Solver/#Scope-For-Improvement)
 
 ## Demo
 ![Sudoku Demo](Demo/demo.gif)
