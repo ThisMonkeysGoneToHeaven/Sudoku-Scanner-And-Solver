@@ -12,7 +12,6 @@ class App(QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Sudoku")
-        self.setWindowIcon(QIcon('favicon.png'))
         self.displayWidth = 300
         self.displayHeight = 400
         self.setGeometry(200, 200, self.displayWidth, self.displayHeight)
@@ -37,6 +36,7 @@ class App(QWidget):
 
     def fileInput(self):
         global the_file
+
         the_chosen_image = QFileDialog.getOpenFileName(
             self, "Select File", "", "*.png *.jpg")
         the_file = the_chosen_image[0]
@@ -46,7 +46,7 @@ class App(QWidget):
         		Board.matrix[j][i] = Detection.board[i][j]
         self.close()
         Board()
-
+        
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

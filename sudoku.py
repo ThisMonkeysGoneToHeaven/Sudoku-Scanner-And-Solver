@@ -208,9 +208,10 @@ class Board:
             if self.keys[pg.K_SPACE]:
                 self.matrix = self.original_matrix
             if self.keys[pg.K_RETURN] or self.keys[pg.K_KP_ENTER]:
-                self.stop = True
                 self.start = time.time()
                 self.return_sol()
+                self.stop = False
+
 
     def highlight_box(self):
         cell_width = self.display_width//9
@@ -246,6 +247,12 @@ class Board:
 
     # Finding Empty Boxes(0's) in the board
 
+    def check_time(self):
+        self.solve_end = time.time()
+        print(self.solve_end-self.solve_start)
+        if self.solve_end-self.solve_start > 3:
+            self.print_stuff(40, "Time limit exceeded", self.black, 50, 100)
+
     def find_empty(self, board):
 
         for i in range(len(board)):
@@ -279,7 +286,11 @@ class Board:
         return True
 
     def solve(self, board):
-
+        self.solve_end = time.time()
+        diff = self.solve_end - self.solve_start
+        if diff > 3:
+            print("bye bye bitches");
+            return False
         # Finding the empty place in the board
         find = self.find_empty(board)
         # If not a single empty place is found that means that the solution is completed so return True which means that it'll end the program
@@ -296,6 +307,7 @@ class Board:
                 if self.solve(board):
                     return True
             # if solve isn't true then this will happen
+
             board[row][col] = 0
         return False
 
@@ -303,6 +315,7 @@ class Board:
         global time
         if self.stop == False:
             print("Solving the board")
+            self.solve_start = time.time()
             self.solve(self.matrix)
 
     def check_no(self):
