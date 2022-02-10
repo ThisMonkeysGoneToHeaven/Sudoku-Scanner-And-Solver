@@ -7,5 +7,5 @@ PyQt5==5.12.1
 PyQt5-sip==4.19.15
 PyQtWebEngine==5.12.1
 tensorboard==1.13.1
-tensorflow==1.13.1
+tensorflow==2.5.3
 tensorflow-estimator==1.13.0
